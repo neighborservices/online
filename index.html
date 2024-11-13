@@ -1,0 +1,174 @@
+<!-- Updated index.html: New User Registration Page with Firebase Integration -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New User Registration - TipCard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Registration Form -->
+    <section class="registration-form">
+        <form id="registrationForm">
+            <!-- Hotel Information -->
+            <div class="form-section">
+                <h2>Hotel Information</h2>
+                <label for="hotelName">Hotel Name</label>
+                <input type="text" id="hotelName" name="hotelName" required>
+
+                <label for="state">State</label>
+                <input type="text" id="state" name="state" required>
+
+                <label for="streetAddress">Street Address</label>
+                <input type="text" id="streetAddress" name="streetAddress" required>
+
+                <label for="city">City</label>
+                <input type="text" id="city" name="city" required>
+
+                <label for="zipCode">Zip Code</label>
+                <input type="text" id="zipCode" name="zipCode" required>
+            </div>
+
+            <!-- Staff Information -->
+            <div class="form-section">
+                <h2>Staff Information</h2>
+                <label for="staffName">Staff Name</label>
+                <input type="text" id="staffName" name="staffName" required>
+
+                <label for="staffRole">Role</label>
+                <input type="text" id="staffRole" name="staffRole" required>
+
+                <label for="telephone">Telephone</label>
+                <input type="tel" id="telephone" name="telephone" required>
+
+                <label for="companyEmail">Company Email</label>
+                <input type="email" id="companyEmail" name="companyEmail" required>
+
+                <label for="companyLogo">Company Logo (Optional)</label>
+                <input type="file" id="companyLogo" name="companyLogo" accept="image/*">
+            </div>
+
+            <!-- Progress Indicator -->
+            <div class="progress-indicator">
+                <div class="step active">1</div>
+                <div class="step">2</div>
+                <div class="step">3</div>
+                <div class="step">4</div>
+            </div>
+
+            <button type="submit" class="register-btn">Register</button>
+            <button type="button" id="generateDataBtn" class="generate-btn">Generate Random Data</button>
+        </form>
+        <div id="successMessage" style="display: none; color: green;">Registration successful!</div>
+    </section>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+    <!-- Custom Scripts -->
+    <script>
+        // Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyCQf7nZ2kSKRcG4EsCxKxKO2DIwyAJzOnc",
+            authDomain: "xaii-eee7e.firebaseapp.com",
+            projectId: "xaii-eee7e",
+            storageBucket: "xaii-eee7e.appspot.com",
+            messagingSenderId: "446604597743",
+            appId: "1:446604597743:web:14b187a9896b664bd2be1a",
+            measurementId: "G-QCP300N8GK"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var auth = firebase.auth();
+        var db = firebase.firestore();
+        var storage = firebase.storage();
+
+        // Handle Registration Form Submission
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('companyEmail').value;
+            const password = "defaultPassword123";
+
+            console.log("Starting user registration...");
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    console.log("User registration successful.");
+                    const uid = userCredential.user.uid;
+
+                    // Upload company logo if provided
+                    const logoFile = document.getElementById('companyLogo').files[0];
+                    let logoURL = "";
+
+                    if (logoFile) {
+                        console.log("Uploading company logo...");
+                        const storageRef = storage.ref().child(`logos/${uid}_${logoFile.name}`);
+                        storageRef.put(logoFile)
+                            .then((snapshot) => snapshot.ref.getDownloadURL())
+                            .then((downloadURL) => {
+                                console.log("Logo uploaded successfully.");
+                                logoURL = downloadURL;
+                                saveManagerDetails(uid, logoURL);
+                            })
+                            .catch((error) => {
+                                console.error("Error uploading logo:", error);
+                                alert("Logo upload failed: " + error.message);
+                            });
+                    } else {
+                        saveManagerDetails(uid, logoURL);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error registering manager:", error);
+                    alert("Registration failed: " + error.message);
+                });
+        });
+
+        // Save Manager Details to Firestore
+        function saveManagerDetails(uid, logoURL) {
+            console.log("Saving manager details to Firestore...");
+            db.collection('managers').doc(uid).set({
+                hotelName: document.getElementById('hotelName').value,
+                state: document.getElementById('state').value,
+                streetAddress: document.getElementById('streetAddress').value,
+                city: document.getElementById('city').value,
+                zipCode: document.getElementById('zipCode').value,
+                email: document.getElementById('companyEmail').value,
+                staffName: document.getElementById('staffName').value,
+                staffRole: document.getElementById('staffRole').value,
+                telephone: document.getElementById('telephone').value,
+                logoURL: logoURL
+            }).then(() => {
+                console.log("Manager details saved successfully.");
+                // Display success message
+                document.getElementById('successMessage').style.display = 'block';
+                // Redirect to bank details page after a short delay
+                setTimeout(() => {
+                    window.location.href = 'bank-details.html';
+                }, 2000);
+            }).catch((error) => {
+                console.error("Error saving manager details:", error);
+                alert("Failed to save details: " + error.message);
+            });
+        }
+
+        // Generate Random Data
+        document.getElementById('generateDataBtn').addEventListener('click', function() {
+            document.getElementById('hotelName').value = 'Hotel ' + Math.floor(Math.random() * 1000);
+            document.getElementById('state').value = 'AX-' + Math.floor(Math.random() * 99999);
+            document.getElementById('streetAddress').value = 'Street ' + Math.floor(Math.random() * 100);
+            document.getElementById('city').value = 'City ' + Math.floor(Math.random() * 100);
+            document.getElementById('zipCode').value = Math.floor(10000 + Math.random() * 90000);
+            document.getElementById('staffName').value = 'Staff ' + Math.floor(Math.random() * 100);
+            document.getElementById('staffRole').value = 'Role ' + Math.floor(Math.random() * 10);
+            document.getElementById('telephone').value = '555-01' + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('companyEmail').value = 'hotel' + Math.floor(Math.random() * 1000) + '@example.com';
+        });
+    </script>
+</body>
+</html>

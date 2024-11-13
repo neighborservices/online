@@ -1,0 +1,105 @@
+**Tipping Management Dashboard - Updated Project Tree**
+
+**Root Directory:**
+- **tipping-dashboard/**
+  - **index.html** (New User Registration Page)
+  - **sign-in.html** (Sign-In Page)
+  - **dashboard.html** (Dashboard Page)
+  - **bank-details.html** (Bank Details Page)
+  - **add-rooms.html** (Add Rooms and Floors Page)
+  - **add-staff.html** (Add Staff Page)
+  - **style.css** (Primary CSS file for styling the application)
+  - **src/**
+    - **js/**
+      - **onboarding.js** (Handles onboarding form logic)
+      - **sign-in.js** (Handles sign-in form logic)
+      - **dashboard.js** (Manages the interactivity for the dashboard)
+      - **firebase.js** (Setup and initialization for Firebase)
+      - **stripe.js** (Stripe integration for bank account linking)
+      - **qrcode.js** (Logic for generating QR codes for rooms)
+    - **components/**
+      - **header.html** (HTML fragment for common header/navigation)
+      - **sidebar.html** (HTML fragment for sidebar navigation in the dashboard)
+      - **footer.html** (HTML fragment for common footer)
+  - **assets/**
+    - **images/**
+      - **logo.png** (Company logo placeholder)
+    - **fonts/**
+      - **Inter/** (Inter font files for consistent typography)
+  - **functions/**
+    - **index.js** (Cloud functions for server-side processing, e.g., handling secure Stripe interactions)
+  - **.firebaserc** (Firebase project configuration - now updated with new project details)
+  - **firebase.json** (Firebase hosting configuration - contains updated settings)
+  - **.env** (Environment variables for sensitive information, such as API keys)
+  - **README.md** (Documentation for the project setup and running)
+  - **replit.nix** (Replit configuration file for environment setup)
+
+**Detailed Structure and Files Description:**
+
+1. **Root Directory:**
+   - **index.html**: Contains the onboarding form for adding the company name, rooms, staff, and bank details using Stripe.
+   - **sign-in.html**: Contains the sign-in form for hotel managers to access their dashboard.
+   - **dashboard.html**: Represents the main dashboard layout, with sections for Overview, Assignments, Rooms, and Reports. It imports common components like header, sidebar, and footer.
+   - **bank-details.html**: Page to add bank details for payment integration using Stripe.
+   - **add-rooms.html**: Page to add rooms and floors information during onboarding.
+   - **add-staff.html**: Page to add staff details during onboarding.
+   - **style.css**: The primary CSS file, containing styles for registration, sign-in, onboarding, and dashboard pages. It includes advanced styling for animations, seamless UI/UX, and responsive layout.
+
+2. **src/**
+   - **js/onboarding.js**: Handles user interactions on the onboarding page, such as adding staff and rooms and submitting information to Firebase.
+   - **js/sign-in.js**: Manages interactions on the sign-in page, including verifying user credentials and logging in.
+   - **js/dashboard.js**: Manages dashboard features, including room assignment, showing reports, and updating the overview section.
+   - **js/firebase.js**: Initializes Firebase services, including Firestore for database interactions, Firebase Auth for user authentication, and Firebase Hosting for deployment.
+   - **js/stripe.js**: Includes functions for Stripe OAuth integration, allowing managers to connect their bank accounts securely through a login-based process similar to Etsy.
+   - **js/qrcode.js**: Uses a library like `qrcode.min.js` to generate QR codes for each room, with logic to dynamically display staff assigned to each room.
+
+3. **components/**
+   - **header.html**: A reusable header component with branding and navigation links.
+   - **sidebar.html**: A reusable sidebar that provides navigation to Overview, Assignments, Rooms, and Reports sections of the dashboard.
+   - **footer.html**: A common footer with links and copyright information.
+
+4. **assets/**
+   - **images/**: Contains images for branding, such as the company logo.
+   - **fonts/Inter/**: Inter font files for cohesive typography across the entire project.
+
+5. **functions/**
+   - **index.js**: Cloud Functions for server-side tasks like securely handling sensitive Stripe interactions without exposing private information to the frontend.
+
+6. **Firebase Config Files**
+   - **.firebaserc**: Firebase project-specific configuration updated to link with the new Firebase project.
+   - **firebase.json**: Configuration for Firebase Hosting, defining rewrites, redirects, and hosting rules for the new Firebase project.
+   - **.env**: Stores environment variables such as Firebase API keys, Stripe secret keys, and other sensitive information for secure access.
+
+7. **README.md**: Contains instructions on how to set up, run, and deploy the project. It will guide new developers or contributors through the installation and configuration process.
+
+8. **Replit Configuration**
+   - **replit.nix**: Configuration file for setting up the Replit environment, ensuring that all necessary dependencies (Firebase CLI, Stripe integration tools, etc.) are available for development and testing.
+
+**Firebase Features to Activate:**
+1. **Authentication**: Enable **Email/Password** and **Google Sign-In** (optional) to allow hotel managers to register and log in.
+2. **Cloud Firestore**: Activate **Cloud Firestore** for storing hotel information, staff, rooms, assignments, and other necessary data.
+3. **Firebase Hosting**: Activate **Firebase Hosting** to deploy and serve the application directly from Firebase.
+4. **Firebase Storage**: Activate **Firebase Storage** to allow hotel managers to upload images, such as hotel logos or staff photos, if required.
+
+**Project Flow:**
+1. **Registration Page** (index.html) - Manager signs up, adds hotel information, staff, and connects the bank account.
+2. **Sign-In Page** (sign-in.html) - Manager enters their credentials to log in and access the dashboard.
+3. **Dashboard Page** (dashboard.html) - Includes:
+   - **Overview Section**: Displays all assignments.
+   - **Assignments Section**: Allows managers to assign staff to rooms.
+   - **Rooms Section**: Shows rooms and generates QR codes.
+   - **Reports Section**: Displays detailed reports on tipping activities, room assignments, etc.
+
+**Firebase and Stripe Integration Points:**
+- **Firebase Authentication**: To manage manager login and onboarding.
+- **Firestore**: To store room, staff, and tipping information.
+- **Stripe API**: To securely link bank accounts during onboarding, similar to Etsy's method.
+
+**Technologies Used:**
+- **Firebase** (Hosting, Firestore, Authentication, Storage)
+- **Stripe API** (OAuth for bank account linking)
+- **HTML/CSS/JavaScript** (For frontend UI and interactivity)
+- **Cloud Functions** (For secure backend processes)
+- **Replit** (For collaborative development and live preview during implementation)
+
+Let me know if this updated project tree fits your current setup and if we can move on to the next steps!

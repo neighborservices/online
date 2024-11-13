@@ -1,0 +1,42 @@
+entrypoint="index.html"
+hidden=[".config"]
+modules = ["nodejs-20", "web:v2-20230623-0b7a606"]
+
+[nix]
+channel = "stable-23_11"
+
+[deployment]
+publicDir = "/"
+deploymentTarget = "static"
+
+[[ports]]
+localPort = 8068
+externalPort = 3003
+
+[[ports]]
+localPort = 8140
+externalPort = 3000
+
+[[ports]]
+localPort = 8293
+externalPort = 5000
+
+[[ports]]
+localPort = 8324
+externalPort = 3002
+
+[[ports]]
+localPort = 8494
+externalPort = 5173
+
+[[ports]]
+localPort = 8748
+externalPort = 3001
+
+[[ports]]
+localPort = 8942
+externalPort = 4200
+
+[[ports]]
+localPort = 9005
+externalPort = 80

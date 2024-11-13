@@ -1,0 +1,81 @@
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <title>Bank Details - TipCard</title>
+                        <link rel="stylesheet" href="style.css">
+                    </head>
+                    <body>
+                        <!-- Bank Details Form -->
+                        <section class="bank-details-form">
+                            <form id="bankDetailsForm">
+                                <h2>Bank Details</h2>
+                                <p>Please connect your bank account securely to receive payments.</p>
+                                <button type="button" id="connectBankBtn" class="connect-bank-btn">Connect Bank Account</button>
+                                <button type="button" id="skipBtn" class="skip-btn">Skip for Now</button>
+                            </form>
+                        </section>
+
+                        <!-- Firebase Scripts -->
+                        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+                        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+                        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+                        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+
+                        <script>
+                            // Firebase configuration
+                            var firebaseConfig = {
+                                apiKey: "AIzaSyCQf7nZ2kSKRcG4EsCxKxKO2DIwyAJzOnc",
+                                authDomain: "xaii-eee7e.firebaseapp.com",
+                                projectId: "xaii-eee7e",
+                                storageBucket: "xaii-eee7e.appspot.com",
+                                messagingSenderId: "446604597743",
+                                appId: "1:446604597743:web:14b187a9896b664bd2be1a",
+                                measurementId: "G-QCP300N8GK"
+                            };
+
+                            // Initialize Firebase
+                            if (!firebase.apps.length) {
+                                firebase.initializeApp(firebaseConfig);
+                            }
+
+                            // Ensure Firebase services are initialized only after the app initialization
+                            firebase.auth().onAuthStateChanged((user) => {
+                                if (user) {
+                                    console.log("User authenticated:", user);
+                                }
+                            });
+
+                            var auth = firebase.auth();
+                            var db = firebase.firestore();
+
+                            // Handle Connect Bank Account Button Click
+                            document.getElementById('connectBankBtn').addEventListener('click', function() {
+                                const user = firebase.auth().currentUser;
+
+                                if (user) {
+                                    const uid = user.uid;
+                                    alert('You will now be redirected to connect your bank account securely.');
+                                    // Example: Saving bank details to Firestore (simulating Stripe bank linking)
+                                    db.collection('managers').doc(uid).collection('bankDetails').add({
+                                        bankName: 'Demo Bank',
+                                        accountNumber: '123456789',
+                                        linked: true
+                                    }).then(() => {
+                                        window.location.href = 'add-rooms.html';
+                                    }).catch((error) => {
+                                        console.error("Error saving bank details:", error);
+                                    });
+                                } else {
+                                    alert("You must be logged in to connect a bank account.");
+                                }
+                            });
+
+                            // Handle Skip Button Click
+                            document.getElementById('skipBtn').addEventListener('click', function() {
+                                window.location.href = 'add-rooms.html';
+                            });
+                        </script>
+                    </body>
+                    </html>

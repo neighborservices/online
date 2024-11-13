@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dashboard - TipCard</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <!-- Header -->
+        <div id="header"></div>
+
+        <!-- Sidebar -->
+        <div id="sidebar"></div>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <section id="overview-section" class="dashboard-section">
+                <h2>Overview</h2>
+                <!-- Content for Overview -->
+                <div id="overview-content"></div>
+            </section>
+
+            <section id="assignments-section" class="dashboard-section">
+                <h2>Assignments</h2>
+                <!-- Content for Assignments -->
+                <div id="assignments-content"></div>
+            </section>
+
+            <section id="rooms-section" class="dashboard-section">
+                <h2>Rooms</h2>
+                <!-- Content for Rooms -->
+                <div id="rooms-content"></div>
+            </section>
+
+            <section id="reports-section" class="dashboard-section">
+                <h2>Reports</h2>
+                <!-- Content for Reports -->
+                <div id="reports-content"></div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <div id="footer"></div>
+
+        <!-- Scripts -->
+        <script src="src/js/firebase.js" type="module"></script>
+        <script src="src/js/dashboard.js" type="module"></script>
+        <script src="src/js/onboarding.js" type="module"></script>
+        <script>
+            // Load reusable components
+            document.getElementById("header").innerHTML = fetch(
+                "src/components/header.html",
+            ).then((res) => res.text());
+            document.getElementById("sidebar").innerHTML = fetch(
+                "src/components/sidebar.html",
+            ).then((res) => res.text());
+            document.getElementById("footer").innerHTML = fetch(
+                "src/components/footer.html",
+            ).then((res) => res.text());
+        </script>
+    </body>
+</html>

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Add Staff - TipCard</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <!-- Add Staff Form -->
+        <section class="add-staff-form">
+            <form id="addStaffForm">
+                <h2>Add Staff Members</h2>
+                <div class="form-section">
+                    <label for="staffName">Staff Name</label>
+                    <input
+                        type="text"
+                        id="staffName"
+                        name="staffName"
+                        required
+                    />
+
+                    <label for="staffRole">Role</label>
+                    <input
+                        type="text"
+                        id="staffRole"
+                        name="staffRole"
+                        required
+                    />
+
+                    <label for="telephone">Telephone</label>
+                    <input
+                        type="tel"
+                        id="telephone"
+                        name="telephone"
+                        required
+                    />
+
+                    <button
+                        type="button"
+                        id="addStaffBtn"
+                        class="add-staff-btn"
+                    >
+                        Add Staff
+                    </button>
+                </div>
+                <div id="staffList" class="staff-list">
+                    <h3>Staff Added:</h3>
+                    <ul id="staffUl"></ul>
+                </div>
+                <button type="button" id="nextBtn" class="next-btn">
+                    Next
+                </button>
+            </form>
+        </section>
+
+        <!-- Firebase Scripts -->
+        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+        <script>
+            // Firebase configuration
+            var firebaseConfig = {
+                apiKey: "AIzaSyCQf7nZ2kSKRcG4EsCxKxKO2DIwyAJzOnc",
+                authDomain: "xaii-eee7e.firebaseapp.com",
+                projectId: "xaii-eee7e",
+                storageBucket: "xaii-eee7e.appspot.com",
+                messagingSenderId: "446604597743",
+                appId: "1:446604597743:web:14b187a9896b664bd2be1a",
+                measurementId: "G-QCP300N8GK",
+            };
+
+            // Initialize Firebase
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+
+            var auth = firebase.auth();
+            var db = firebase.firestore();
+
+            // Variables for staff list
+            const staffList = document.getElementById("staffUl");
+            const addStaffBtn = document.getElementById("addStaffBtn");
+            const nextBtn = document.getElementById("nextBtn");
+
+            // Handle Add Staff Button Click
+            addStaffBtn.addEventListener("click", function () {
+                const staffName = document
+                    .getElementById("staffName")
+                    .value.trim();
+                const staffRole = document
+                    .getElementById("staffRole")
+                    .value.trim();
+                const telephone = document
+                    .getElementById("telephone")
+                    .value.trim();
+
+                if (staffName && staffRole && telephone) {
+                    // Display added staff in the list
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `Name: ${staffName}, Role: ${staffRole}, Telephone: ${telephone}`;
+                    staffList.appendChild(listItem);
+
+                    // Save staff data to Firestore
+                    const user = auth.currentUser;
+                    if (user) {
+                        const uid = user.uid;
+                        db.collection("managers")
+                            .doc(uid)
+                            .collection("staff")
+                            .add({
+                                staffName: staffName,
+                                staffRole: staffRole,
+                                telephone: telephone,
+                            })
+                            .then(() => {
+                                console.log("Staff added successfully.");
+                            })
+                            .catch((error) => {
+                                console.error("Error adding staff:", error);
+                            });
+                    } else {
+                        alert("You must be logged in to add a staff member.");
+                    }
+
+                    // Clear input fields after adding
+                    document.getElementById("staffName").value = "";
+                    document.getElementById("staffRole").value = "";
+                    document.getElementById("telephone").value = "";
+                } else {
+                    alert("Please enter all the staff details.");
+                }
+            });
+
+            // Handle Next Button Click to proceed to the next page
+            nextBtn.addEventListener("click", function () {
+                window.location.href = "dashboard.html";
+            });
+
+            // Firebase Authentication State
+            auth.onAuthStateChanged(function (user) {
+                if (user) {
+                    console.log("User is logged in:", user.email);
+                } else {
+                    console.log("No user is logged in.");
+                    // Redirect to login page if no user is logged in
+                    window.location.href = "index.html";
+                }
+            });
+        </script>
+    </body>
+</html>
